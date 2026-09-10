@@ -1,0 +1,640 @@
+/* ===================================================================
+   KURT KAPANI & α1Q GÜVENLİK SİSTEMİ - STYLESHEET
+   =================================================================== */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html.kurt-locked-boot,
+html.kurt-locked-boot body {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    background-color: #000000;
+    overflow: hidden !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+/* ===================================================================
+   1. 10-SECOND iOS SECURITY COUNTDOWN OVERLAY
+   =================================================================== */
+.countdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.countdown-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.countdown-box {
+    width: 100%;
+    max-width: 340px;
+    background: rgba(28, 28, 30, 0.85);
+    border: 1px solid rgba(255, 69, 58, 0.4);
+    border-radius: 28px;
+    padding: 30px 24px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(255, 59, 48, 0.28);
+    animation: countdownModalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes countdownModalIn {
+    0% {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.countdown-badge-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.countdown-icon {
+    width: 48px;
+    height: 48px;
+    background: #ff3b30;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255, 59, 48, 0.6);
+}
+
+.countdown-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.countdown-pulse-ring {
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 69, 58, 0.6);
+    animation: countdownPulse 1.6s infinite cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes countdownPulse {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1.45);
+        opacity: 0;
+    }
+}
+
+.countdown-title {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: #ff453a;
+    margin-bottom: 6px;
+}
+
+.countdown-desc {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 18px;
+}
+
+.countdown-highlight-red {
+    color: #b71c1c;
+    font-weight: 700;
+}
+
+.countdown-number {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 25px rgba(255, 69, 58, 0.55);
+    font-variant-numeric: tabular-nums;
+    transition: transform 0.12s ease;
+}
+
+.countdown-number.tick-pop {
+    transform: scale(1.15);
+    color: #ff453a;
+}
+
+.countdown-progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.countdown-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #ff453a, #ff9f0a);
+    border-radius: 4px;
+    transition: width 1s linear;
+}
+
+/* ==========================================================================
+   2. α1Q v2.0 (Fullscreen Security Lockout)
+   ========================================================================== */
+.kurt-kapani-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #000000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    overscroll-behavior: none;
+    padding: 20px 16px;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.04);
+    transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.kurt-kapani-overlay.active,
+html.kurt-locked-boot .kurt-kapani-overlay {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+}
+
+html.kurt-locked-boot .kurt-kapani-overlay {
+    transition: none !important;
+}
+
+.kurt-kapani-ambient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 30%, rgba(255, 59, 48, 0.18) 0%, rgba(255, 69, 58, 0.05) 45%, rgba(0, 0, 0, 0.95) 75%);
+    pointer-events: none;
+    animation: wolfBreathe 4s infinite alternate ease-in-out;
+}
+
+@keyframes wolfBreathe {
+    0% {
+        opacity: 0.75;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+}
+
+.kurt-kapani-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+
+/* Secret Unlock Trigger Badge */
+.kurt-hero {
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease;
+}
+
+.kurt-hero:active {
+    transform: scale(0.95);
+}
+
+.kurt-glow-ring {
+    position: absolute;
+    width: 112px;
+    height: 112px;
+    top: -12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 45, 85, 0.45) 0%, rgba(255, 45, 85, 0) 70%);
+    animation: wolfRingGlow 2.5s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes wolfRingGlow {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0.85;
+    }
+}
+
+.kurt-avatar-frame {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 69, 58, 0.9);
+    background-color: #0c0203;
+    overflow: visible;
+    box-shadow: 0 0 28px rgba(255, 45, 85, 0.5), inset 0 0 12px rgba(255, 59, 48, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kurt-avatar-crop {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
+}
+
+.kurt-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    transform: scale(1.38);
+    filter: drop-shadow(0 0 6px rgba(255, 45, 85, 0.35));
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.kurt-hero:hover .kurt-avatar-img {
+    transform: scale(1.46);
+}
+
+.kurt-lock-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 28px;
+    height: 28px;
+    background: #ff3b30;
+    color: #ffffff;
+    border-radius: 50%;
+    border: 2.5px solid #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.kurt-lock-badge svg {
+    width: 13px;
+    height: 13px;
+}
+
+.kurt-status-chip {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: rgba(255, 69, 58, 0.15);
+    border: 0.5px solid rgba(255, 69, 58, 0.35);
+    border-radius: 20px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #ffffff;
+    text-transform: none;
+}
+
+.kurt-status-chip .pulse-dot {
+    width: 6.5px;
+    height: 6.5px;
+    border-radius: 50%;
+    background-color: #ff453a;
+    animation: blinkRed 1s infinite alternate ease-in-out;
+}
+
+@keyframes blinkRed {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.kurt-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kurt-title {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: #ffffff;
+    margin-bottom: 4px;
+    text-shadow: 0 0 20px rgba(255, 69, 58, 0.3);
+}
+
+.kurt-subtitle {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #ff453a;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.kurt-card {
+    width: 100%;
+    background: rgba(28, 28, 30, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 6px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.kurt-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 0;
+    font-size: 13.5px;
+}
+
+.kurt-label {
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 400;
+}
+
+.kurt-val {
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.kurt-val.status-danger {
+    color: #ff453a;
+    font-weight: 700;
+}
+
+.kurt-divider {
+    height: 0.5px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.kurt-instruction {
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 290px;
+    margin-bottom: 24px;
+}
+
+/* 3. Apple "Slide to Unlock" Slider */
+.slide-unlock-wrapper {
+    width: 100%;
+    max-width: 300px;
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    pointer-events: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), max-height 0.4s ease, margin 0.35s ease;
+}
+
+.slide-unlock-wrapper.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    max-height: 80px;
+    margin-bottom: 20px;
+}
+
+.slide-unlock-track {
+    position: relative;
+    width: 100%;
+    height: 52px;
+    background: rgba(44, 44, 46, 0.65);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 0.5px solid rgba(255, 255, 255, 0.16);
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.slide-unlock-thumb {
+    position: relative;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1c1c1e;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.slide-unlock-thumb:active {
+    cursor: grabbing;
+}
+
+.slide-unlock-thumb svg {
+    width: 18px;
+    height: 18px;
+    margin-left: 2px;
+}
+
+.slide-unlock-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    pointer-events: none;
+    user-select: none;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.25) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: appleSlideShimmer 2.4s infinite linear;
+    transition: opacity 0.25s ease;
+}
+
+@keyframes appleSlideShimmer {
+    0% {
+        background-position: -150% 0;
+    }
+    100% {
+        background-position: 150% 0;
+    }
+}
+
+.kurt-footer {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================================
+   3. UNLOCKED SUCCESS STATE
+   =================================================================== */
+.unlocked-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: radial-gradient(circle at 50% 30%, #2b060b 0%, #0d0203 70%, #000000 100%);
+}
+
+.unlocked-card {
+    background: rgba(28, 28, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 36px 28px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.unlocked-icon {
+    width: 60px;
+    height: 60px;
+    background: #30d158;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 0 25px rgba(48, 209, 88, 0.45);
+}
+
+.unlocked-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.unlocked-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.unlocked-card p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 24px;
+    line-height: 1.45;
+}
+
+.restart-btn {
+    background: linear-gradient(135deg, #a81320 0%, #6e0812 100%);
+    color: #ffffff;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 14px;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(168, 19, 32, 0.4);
+    transition: transform 0.15s ease;
+}
+
+.restart-btn:active {
+    transform: scale(0.96);
+}

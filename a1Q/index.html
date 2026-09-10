@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>α1Q Protokolü • Kurt Kapanı</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <meta name="theme-color" content="#000000">
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Immediate Persistent Lock Detection (Prevents any flicker on restart) -->
+    <script>
+        try {
+            if (localStorage.getItem("ata_kurt_kapani_lock_v1") === "locked") {
+                document.documentElement.classList.add("kurt-locked-boot");
+            }
+        } catch (e) { }
+    </script>
+</head>
+
+<body>
+    <!-- 1. iOS Security Countdown Overlay (10s Countdown) -->
+    <div class="countdown-overlay" id="countdownOverlay" aria-hidden="true">
+        <div class="countdown-box">
+            <div class="countdown-badge-wrap">
+                <div class="countdown-pulse-ring"></div>
+                <div class="countdown-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                        </path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="countdown-title">GÜVENLİK İHLALİ</h3>
+            <p class="countdown-desc">3 kez hatalı giriş tespit edildi.<br><span class="countdown-highlight-red">α1Q
+                    Güvenlik Duvarı</span> devreye giriyor...</p>
+            <div class="countdown-number" id="countdownNumber">5</div>
+            <div class="countdown-progress-track">
+                <div class="countdown-progress-bar" id="countdownProgressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. α1Q v2.0 (Fullscreen Security Lockout) -->
+    <div class="kurt-kapani-overlay" id="kurtKapaniOverlay" aria-hidden="true">
+        <div class="kurt-kapani-ambient"></div>
+        <div class="kurt-kapani-container">
+            <!-- Secret Trigger Zone: The a1Q avatar badge is the secret button! (Double-tap to reveal slider) -->
+            <div class="kurt-hero" id="secretUnlockTrigger" title="Güvenlik Rozeti" tabindex="0" role="button"
+                aria-label="Gizli Kilit Rozeti">
+                <div class="kurt-glow-ring"></div>
+                <div class="kurt-avatar-frame">
+                    <div class="kurt-avatar-crop">
+                        <img src="avatar.png" alt="α1Q" class="kurt-avatar-img">
+                    </div>
+                    <div class="kurt-lock-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" fill="none">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="kurt-status-chip">
+                    <span class="pulse-dot"></span> α1Q v2.0 WKG
+                </div>
+            </div>
+
+            <div class="kurt-content">
+                <h1 class="kurt-title">α1Q v2.0</h1>
+                <p class="kurt-subtitle">CİHAZ VE ERİŞİM KİLİTLENDİ</p>
+                <div class="kurt-card">
+                    <div class="kurt-card-row">
+                        <span class="kurt-label">Sebep:</span>
+                        <span class="kurt-val">3 Kez Yetkisiz Giriş İhlali</span>
+                    </div>
+                    <div class="kurt-divider"></div>
+                    <div class="kurt-card-row">
+                        <span class="kurt-label">Durum:</span>
+                        <span class="kurt-val status-danger">Tüm Protokoller Askıya Alındı</span>
+                    </div>
+                    <div class="kurt-divider"></div>
+                    <div class="kurt-card-row">
+                        <span class="kurt-label">Güvenlik:</span>
+                        <span class="kurt-val">α1Q v2.0</span>
+                    </div>
+                </div>
+                <p class="kurt-instruction">Şüpheli Davranışlar Tespit Edildi, Erişiminiz Kısıtlandı, Erişim İçin Admine
+                    Ulaşınız.</p>
+            </div>
+
+            <!-- Apple "Slide to Unlock" Slider (Revealed upon double tapping the secret badge) -->
+            <div class="slide-unlock-wrapper" id="slideUnlockWrapper">
+                <div class="slide-unlock-track" id="slideUnlockTrack">
+                    <div class="slide-unlock-thumb" id="slideUnlockThumb">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                    <span class="slide-unlock-text" id="slideUnlockText">kilidi açmak için kaydırın</span>
+                </div>
+            </div>
+
+            <div class="kurt-footer">
+                <span>α1Q Güvenlik Protokolü • v2.0 WKG</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unlocked State Notification Screen (Shown only after successful slide unlock) -->
+    <div class="unlocked-screen" id="unlockedScreen">
+        <div class="unlocked-card">
+            <div class="unlocked-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h2>Kilit Açıldı</h2>
+            <p>α1Q v2.0 başarıyla devre dışı bırakıldı.</p>
+            <button class="restart-btn" id="restartBtn">Sayacı Yeniden Başlat</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
