@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>α1Q v3.0 w.DRAGON Güvenlik Sistemi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="avatar.png">
+</head>
+
+<body>
+
+    <!-- ===================================================================
+         DEMO UYGULAMA / HOST KONTROL PANELİ
+         =================================================================== -->
+    <main class="demo-container">
+        <div class="demo-dashboard">
+            <div class="demo-header">
+                <div class="demo-badge-icon">
+                    <img src="avatar.png" alt="α1Q Logo">
+                </div>
+                <div class="demo-header-info">
+                    <h1>α1Q v3.0 w.DRAGON</h1>
+                    <p>Müstakil Donanım Hızlandırmalı Güvenlik Sistemi</p>
+                </div>
+            </div>
+
+            <div class="demo-status-card">
+                <span class="status-label">Sistem Durumu:</span>
+                <div class="status-badge" id="systemStatusBadge">
+                    <span class="dot"></span>
+                    <span id="systemStatusText">Korumada (Normal)</span>
+                </div>
+            </div>
+
+            <div class="demo-btn-group">
+                <button class="demo-btn btn-danger" id="btnTriggerCountdown">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    10s Geri Sayım ve İhlali Başlat
+                </button>
+
+                <button class="demo-btn btn-primary" id="btnTriggerLockout">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Doğrudan Kilit Ekranına Geç
+                </button>
+
+                <button class="demo-btn btn-outline" id="btnForceUnlock">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                    </svg>
+                    Kilidi Aç (Test / Acil)
+                </button>
+            </div>
+
+            <div class="demo-steps-card">
+                <div class="demo-steps-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    4 Adımlı Gizli Kilit Açma Dizisi
+                </div>
+                <ul class="demo-steps-list">
+                    <li><span class="step-num">1</span> <span><b>"Güvenlik"</b> satırına <b>2 kez</b> hızlıca tıklayın.</span></li>
+                    <li><span class="step-num">2</span> <span>Parmağınızı veya fareyi <b>aşağı doğru kaydırın</b> (Swipe Down).</span></li>
+                    <li><span class="step-num">3</span> <span>Ateş auralı <b>Logoya 2 kez</b> çift tıklayın.</span></li>
+                    <li><span class="step-num">4</span> <span>Ortada beliren Apple çubuğunu <b>sağa doğru kaydırın</b>.</span></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===================================================================
+         1. iOS SECURITY COUNTDOWN OVERLAY (10s Countdown)
+         =================================================================== -->
+    <div class="countdown-overlay" id="countdownOverlay" style="display: none;" aria-hidden="true">
+        <!-- Fullscreen Dragon Video Canvas (Chroma Key Green Removed via WebGL) -->
+        <div class="countdown-dragon-fullscreen">
+            <video id="dragonVideo" src="dragon.mp4" playsinline webkit-playsinline loop preload="auto"
+                style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0.001;pointer-events:none;"></video>
+            <canvas id="dragonCanvas" class="dragon-fullscreen-canvas"></canvas>
+        </div>
+
+        <div class="countdown-box">
+            <h3 class="countdown-title">GÜVENLİK İHLALİ</h3>
+            <p class="countdown-desc">3 kez hatalı giriş tespit edildi.<br><span class="countdown-highlight-red">α1Q
+                    Güvenlik Duvarı</span> devreye giriyor...</p>
+            <div class="countdown-number" id="countdownNumber">10</div>
+            <div class="countdown-progress-track">
+                <div class="countdown-progress-bar" id="countdownProgressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         2. α1Q v3.0 w.DRAGON (Fullscreen Security Lockout)
+         =================================================================== -->
+    <div class="kurt-kapani-overlay" id="kurtKapaniOverlay" style="display: none;" aria-hidden="true">
+        <div class="kurt-kapani-ambient"></div>
+
+        <!-- Lock Screen Dragon Video Canvas (Fullscreen WebGL Chroma Key) -->
+        <div class="kurt-dragon-fullscreen">
+            <video id="kurtDragonVideo" src="kilit_dragon.mp4" playsinline webkit-playsinline autoplay muted loop
+                preload="auto"
+                style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0.001;pointer-events:none;"></video>
+            <canvas id="kurtDragonCanvas" class="kurt-dragon-fullscreen-canvas"></canvas>
+        </div>
+
+        <div class="kurt-kapani-container">
+            <!-- Secret Trigger Zone: The a1Q avatar badge is part of secret trigger -->
+            <div class="kurt-hero" id="secretUnlockTrigger" title="Güvenlik Rozeti" tabindex="0" role="button"
+                aria-label="Gizli Kilit Rozeti">
+                <div class="kurt-glow-ring"></div>
+                <div class="kurt-avatar-frame">
+                    <!-- 4K Ultra Dragon Fire Flame Ring -->
+                    <div class="dragon-fire-aura" aria-hidden="true">
+                        <div class="dragon-fire-core"></div>
+                        <div class="dragon-fire-layer flame-a"></div>
+                        <div class="dragon-fire-layer flame-b"></div>
+                        <div class="dragon-fire-layer flame-c"></div>
+                        <div class="dragon-sparks">
+                            <span class="d-spark ds-1"></span>
+                            <span class="d-spark ds-2"></span>
+                            <span class="d-spark ds-3"></span>
+                            <span class="d-spark ds-4"></span>
+                            <span class="d-spark ds-5"></span>
+                            <span class="d-spark ds-6"></span>
+                            <span class="d-spark ds-7"></span>
+                            <span class="d-spark ds-8"></span>
+                        </div>
+                    </div>
+                    <div class="kurt-avatar-crop">
+                        <img src="avatar.png" alt="α1Q" class="kurt-avatar-img">
+                    </div>
+                    <div class="kurt-lock-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" fill="none">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="kurt-status-chip">
+                    <span class="pulse-dot"></span> α1Q v3.0 w.DRAGON
+                </div>
+            </div>
+
+            <div class="kurt-content">
+                <div class="kurt-card">
+                    <div class="kurt-card-row">
+                        <span class="kurt-label">Sebep:</span>
+                        <span class="kurt-val">3 Kez Yetkisiz Giriş İhlali</span>
+                    </div>
+                    <div class="kurt-divider"></div>
+                    <div class="kurt-card-row">
+                        <span class="kurt-label">Durum:</span>
+                        <span class="kurt-val status-danger">Tüm Protokoller Askıya Alındı</span>
+                    </div>
+                    <div class="kurt-divider"></div>
+                    <div class="kurt-card-row" id="guvenlikTrigger">
+                        <span class="kurt-label">Güvenlik:</span>
+                        <span class="kurt-val">α1Q v3.0 w.DRAGON</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apple "Slide to Unlock" Slider -->
+            <div class="slide-unlock-wrapper" id="slideUnlockWrapper">
+                <div class="slide-unlock-track" id="slideUnlockTrack">
+                    <div class="slide-unlock-progress" id="slideUnlockProgress"></div>
+                    <div class="slide-unlock-thumb" id="slideUnlockThumb">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                    <span class="slide-unlock-text" id="slideUnlockText">kilidi açmak için kaydırın</span>
+                </div>
+            </div>
+
+            <div class="kurt-footer">
+                <span>α1Q Güvenlik Protokolü • v3.0 w.DRAGON</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Core Engine -->
+    <script src="a1q-security.js"></script>
+
+    <!-- Dashboard Interaction Script -->
+    <script>
+        (function() {
+            const badge = document.getElementById("systemStatusBadge");
+            const badgeText = document.getElementById("systemStatusText");
+
+            if (window.A1QSecurity) {
+                window.A1QSecurity.onStateChange(function(state) {
+                    if (!badge || !badgeText) return;
+                    badge.classList.remove("locked", "countdown");
+                    if (state === "countdown") {
+                        badge.classList.add("countdown");
+                        badgeText.textContent = "10s Geri Sayım Devrede";
+                    } else if (state === "locked") {
+                        badge.classList.add("locked");
+                        badgeText.textContent = "Kilitlendi (Erişim Yok)";
+                    } else {
+                        badgeText.textContent = "Korumada (Normal)";
+                    }
+                });
+            }
+
+            document.getElementById("btnTriggerCountdown")?.addEventListener("click", () => {
+                window.A1QSecurity?.triggerCountdown();
+            });
+
+            document.getElementById("btnTriggerLockout")?.addEventListener("click", () => {
+                window.A1QSecurity?.enterLockout();
+            });
+
+            document.getElementById("btnForceUnlock")?.addEventListener("click", () => {
+                window.A1QSecurity?.unlock();
+            });
+        })();
+    </script>
+</body>
+
+</html>
